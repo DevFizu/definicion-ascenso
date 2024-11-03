@@ -398,15 +398,17 @@ function mostrarPartidoFinalAscenso() {
     }
 
     const celdaIngresar = document.createElement('td');
-    if (!partido.resultado) {
+    //if (!partido.resultado) {
         const inputLocal = document.createElement('input');
         inputLocal.type = 'number';
         inputLocal.min = 0;
+        inputLocal.value = partido.resultado ? partido.resultado.local : '';
         inputLocal.id = `local-final`;
 
         const inputVisitante = document.createElement('input');
         inputVisitante.type = 'number';
         inputVisitante.min = 0;
+        inputVisitante.value = partido.resultado ? partido.resultado.visitante : '';
         inputVisitante.id = `visitante-final`;
 
         const botonGuardar = document.createElement('button');
@@ -417,9 +419,9 @@ function mostrarPartidoFinalAscenso() {
         celdaIngresar.appendChild(document.createTextNode(' - '));
         celdaIngresar.appendChild(inputVisitante);
         celdaIngresar.appendChild(botonGuardar);
-    } else {
+    /*} else {
         celdaIngresar.textContent = 'Resultado guardado';
-    }
+    }*/
 
     fila.appendChild(celdaLocal);
     fila.appendChild(celdaVisitante);

@@ -53,15 +53,17 @@ function inicializarPartidosPrimeraFase() {
     // Actualizar los resultados ya conocidos
     // Suponiendo que Quilmes, San Telmo y Gimnasia (M) ganaron
     // Necesitamos identificar cuáles son esos partidos y asignarles el resultado correspondiente
-    /**partidosPrimeraFase.forEach(partido => {
+    partidosPrimeraFase.forEach(partido => {
         if (partido.local.nombre === 'Quilmes') {
-            partido.resultado = { local: 1, visitante: 0 }; // Quilmes ganó
-        } else if (partido.visitante.nombre === 'San Telmo') {
-            partido.resultado = { local: 0, visitante: 2 }; // San Telmo ganó de visitante
-        } else if (partido.visitante.nombre === 'Gimnasia (M)') {
-            partido.resultado = { local: 1, visitante: 3 }; // Gimnasia (M) ganó de visitante
+            partido.resultado = { local: 2, visitante: 0 }; // Quilmes ganó
+        } else if (partido.local.nombre === 'San Telmo') {
+            partido.resultado = { local: 1, visitante: 0 }; // San Telmo ganó de visitante
+        } else if (partido.local.nombre === 'Gimnasia (M)') {
+            partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
+        } else if (partido.local.nombre === 'Nueva Chicago') {
+        partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
         }
-    });*/
+    });
 }
 
 // Función para mostrar los partidos de la primera fase

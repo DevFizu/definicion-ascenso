@@ -22,6 +22,17 @@ const equiposZonaB = [
     { nombre: 'Gimnasia (S)', puntos: 58, posicion: 8 }
 ];
 
+// Lista de resultados de la primera fase
+let resultadosPrimeraFase = [
+    {nombre: 'San Martin (SJ)', resultado: { local: 2, visitante: 1 }},
+    {nombre: 'Quilmes', resultado: { local: 2, visitante: 0 }},
+    {nombre: 'All Boys', resultado: {}},
+    {nombre: 'San Telmo', resultado: { local: 1, visitante: 0 }},
+    {nombre: 'Gimnasia (M)', resultado: { local: 1, visitante: 1 }},
+    {nombre: 'Nueva Chicago', resultado: { local: 1, visitante: 1 }},
+    {nombre: 'Dep. Madryn', resultado: { local: 0, visitante: 0 }}
+];
+
 // Lista de partidos de la primera fase
 let partidosPrimeraFase = [];
 
@@ -53,7 +64,16 @@ function inicializarPartidosPrimeraFase() {
     // Actualizar los resultados ya conocidos
     // Suponiendo que Quilmes, San Telmo y Gimnasia (M) ganaron
     // Necesitamos identificar cuáles son esos partidos y asignarles el resultado correspondiente
-    partidosPrimeraFase.forEach(partido => {
+    resultadosPrimeraFase.forEach(resultado => {
+        if (resultado.resultado.local !== undefined && resultado.resultado.visitante !== undefined) {
+            const partido = partidosPrimeraFase.find(p => p.local.nombre === resultado.nombre);
+            if (partido) {
+                partido.resultado = resultado.resultado;
+            }
+        }
+    });
+    
+/*    partidosPrimeraFase.forEach(partido => {
         if (partido.local.nombre === 'Quilmes') {
             partido.resultado = { local: 2, visitante: 0 }; // Quilmes ganó
         } else if (partido.local.nombre === 'San Telmo') {
@@ -61,9 +81,9 @@ function inicializarPartidosPrimeraFase() {
         } else if (partido.local.nombre === 'Gimnasia (M)') {
             partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
         } else if (partido.local.nombre === 'Nueva Chicago') {
-        partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
+            partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
         }
-    });
+    });*/
 }
 
 // Función para mostrar los partidos de la primera fase
@@ -233,7 +253,7 @@ function mostrarTablaActualizada(equiposAvanzan) {
 
     const tabla = document.createElement('table');
     const encabezado = document.createElement('tr');
-    ['Posición', 'Equipo', 'Puntos'].forEach(texto => {
+    ['Posición', 'Equipo', 'Posición Original', 'Puntos'].forEach(texto => {
         const th = document.createElement('th');
         th.textContent = texto;
         encabezado.appendChild(th);
@@ -249,11 +269,15 @@ function mostrarTablaActualizada(equiposAvanzan) {
         const celdaEquipo = document.createElement('td');
         celdaEquipo.textContent = equipo.nombre;
 
+        const celdaPosicionOriginal = document.createElement('td');
+        celdaPosicionOriginal.textContent = equipo.posicion;
+
         const celdaPuntos = document.createElement('td');
         celdaPuntos.textContent = equipo.puntos;
 
         fila.appendChild(celdaPosicion);
         fila.appendChild(celdaEquipo);
+        fila.appendChild(celdaPosicionOriginal);
         fila.appendChild(celdaPuntos);
 
         tabla.appendChild(fila);
@@ -364,7 +388,7 @@ function inicializarPartidoFinalAscenso() {
     partidoFinalAscenso = {
         local: equipoLocal,
         visitante: equipoVisitante,
-        resultado: null
+        resultado: { local: 0, visitante: 2 }
     };
 }
 

@@ -1,3 +1,23 @@
+//equipos
+const equipos = [
+    { nombre: 'San Martin (T)' }, // 0
+    { nombre: 'San Martin (SJ)' }, // 1
+    { nombre: 'Quilmes' }, // 2
+    { nombre: 'All Boys' }, // 3
+    { nombre: 'Gimnasia (J)' }, // 4
+    { nombre: 'Estudiantes (BA)' }, // 5
+    { nombre: 'Racing (C)' },   // 6
+    { nombre: 'San Miguel' },   // 7
+    { nombre: 'Aldosivi' }, // 8
+    { nombre: 'Dep. Madryn' },  // 9
+    { nombre: 'Nueva Chicago' },    // 10
+    { nombre: 'Gimnasia (M)' }, // 11
+    { nombre: 'San Telmo' },    // 12
+    { nombre: 'Colon' },    // 13
+    { nombre: 'Def. de Belgrano' }, // 14
+    { nombre: 'Gimnasia (S)' }  // 15
+]
+
 // Datos de equipos de la Zona A
 const equiposZonaA = [
     { nombre: 'San Martin (T)', puntos: 81, posicion: 1 },
@@ -22,19 +42,43 @@ const equiposZonaB = [
     { nombre: 'Gimnasia (S)', puntos: 58, posicion: 8 }
 ];
 
+let partidoFinalAscenso = {
+    local: equiposZonaA[0],
+    visitante: equiposZonaB[0],
+    resultado: { local: 0, visitante: 2 }
+};
 // Lista de resultados de la primera fase
 let resultadosPrimeraFase = [
     {nombre: 'San Martin (SJ)', resultado: { local: 2, visitante: 1 }},
     {nombre: 'Quilmes', resultado: { local: 2, visitante: 0 }},
-    {nombre: 'All Boys', resultado: {}},
+    {nombre: 'All Boys', resultado: {local: 1, visitante: 1}},
     {nombre: 'San Telmo', resultado: { local: 1, visitante: 0 }},
     {nombre: 'Gimnasia (M)', resultado: { local: 1, visitante: 1 }},
     {nombre: 'Nueva Chicago', resultado: { local: 1, visitante: 1 }},
     {nombre: 'Dep. Madryn', resultado: { local: 0, visitante: 0 }}
 ];
+let resultadosCuartos = [
+    {nombre: 'San Martin (T)', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }},
+    {nombre: 'San Martin (SJ)', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }},
+    {nombre: 'Dep. Madryn', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }},
+    {nombre: 'Nueva Chicago', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }}
+];
+let resultadosSemi = [
+    {nombre: 'San Martin (T)', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }},
+    {nombre: 'San Martin (SJ)', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }}
+];
 
-// Lista de partidos de la primera fase
 let partidosPrimeraFase = [];
+let partidosCuartos = [];
+let partidosSemifinales = [];
+let equiposCuartos = [];
+let equiposSemi = [];
+let equiposfinal = [];
+
+// Inicializar todo al cargar la página
+inicializarPartidosPrimeraFase();
+mostrarPartidoFinalAscenso();
+actualizarTablaYProximaFase(); // Llamamos a esta función para mostrar la tabla y los partidos
 
 // Función para inicializar los partidos de la primera fase
 function inicializarPartidosPrimeraFase() {
@@ -62,7 +106,6 @@ function inicializarPartidosPrimeraFase() {
     ];
 
     // Actualizar los resultados ya conocidos
-    // Suponiendo que Quilmes, San Telmo y Gimnasia (M) ganaron
     // Necesitamos identificar cuáles son esos partidos y asignarles el resultado correspondiente
     resultadosPrimeraFase.forEach(resultado => {
         if (resultado.resultado.local !== undefined && resultado.resultado.visitante !== undefined) {
@@ -73,17 +116,6 @@ function inicializarPartidosPrimeraFase() {
         }
     });
     
-/*    partidosPrimeraFase.forEach(partido => {
-        if (partido.local.nombre === 'Quilmes') {
-            partido.resultado = { local: 2, visitante: 0 }; // Quilmes ganó
-        } else if (partido.local.nombre === 'San Telmo') {
-            partido.resultado = { local: 1, visitante: 0 }; // San Telmo ganó de visitante
-        } else if (partido.local.nombre === 'Gimnasia (M)') {
-            partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
-        } else if (partido.local.nombre === 'Nueva Chicago') {
-            partido.resultado = { local: 1, visitante: 1 }; // Gimnasia (M) ganó de visitante
-        }
-    });*/
 }
 
 // Función para mostrar los partidos de la primera fase
@@ -172,20 +204,9 @@ function guardarResultado(index) {
 }
 
 function actualizarTablaYProximaFase() {
-    // Obtener los equipos que avanzan a la siguiente fase
-    let equiposAvanzan = partidosPrimeraFase.map(partido => {
-        if (partido.resultado) {
-            if (partido.resultado.local > partido.resultado.visitante) {
-                return partido.local;
-            } else if (partido.resultado.local < partido.resultado.visitante) {
-                return partido.visitante;
-            } else {
-                return partido.local; // Avanza el local en caso de empate
-            }
-        } else {
-            return partido.local; // Asumimos que gana el local si no hay resultado
-        }
-    });
+
+    // Actualizar las vistas de Primera Fase
+    mostrarPartidosPrimeraFase();
 
     // Determinar el perdedor del partido por el primer ascenso
     let perdedorFinal;
@@ -201,37 +222,84 @@ function actualizarTablaYProximaFase() {
         // Asumimos que el local ganó si no hay resultado
         perdedorFinal = partidoFinalAscenso.visitante;
     }
-
-    // Agregar el perdedor a los equipos que avanzan
-    equiposAvanzan.push(perdedorFinal);
-    console.log('Equipos que avanzan:', equiposAvanzan); // Agrega este console.log
-
-    // Ordenar los equipos que avanzan según su posición en la fase regular
-    equiposAvanzan.sort((a, b) => {
-        if (a.posicion !== b.posicion) {
-            return a.posicion - b.posicion; // El que tiene mejor posición (número menor) va primero
+        
+    // Obtener los equipos que avanzan a la siguiente fase
+    equiposCuartos = partidosPrimeraFase.map(partido => {
+        if (partido.resultado) {
+            if (partido.resultado.local > partido.resultado.visitante) {
+                return partido.local;
+            } else if (partido.resultado.local < partido.resultado.visitante) {
+                return partido.visitante;
+            } else {
+                return partido.local; // Avanza el local en caso de empate
+            }
         } else {
-            return b.puntos - a.puntos; // Si están en la misma posición, el que tiene más puntos va primero
+            return partido.local; // Asumimos que gana el local si no hay resultado
         }
     });
 
-    // Generar los partidos de la próxima fase
-    generarPartidosProximaFase(equiposAvanzan);
+    // Agregar el perdedor a los equipos que avanzan
+    equiposCuartos.push(perdedorFinal);
+    //console.log('Equipos que avanzan:', equiposAvanzanPrimeraFase); // Agrega este console.log
 
-    // Actualizar las vistas
-    mostrarPartidosPrimeraFase();
-    mostrarTablaActualizada(equiposAvanzan);
-    mostrarProximaFase();
+    ordenarEquipos(equiposCuartos);
+    mostrarTablaParaCuartos(equiposCuartos);
+
+    // Generar los partidos de Cuartos
+    generarPartidosCuartos(equiposCuartos);
+    mostrarPartidosCuartos();
+    equiposSemi = calcularEquiposQueAvanzan('semi');
+    mostrarTablaActualizadaCuartos(equiposSemi);
+
+
+    // Generar los partidos de las semifinales
+    generarPartidosSemifinales(equiposSemi);
+    mostrarSemifinales();
     mostrarPartidoFinalAscenso();
 }
 
+function ordenarEquipos(equipos) {
+    return equipos.sort((a, b) => {
+        if (a.posicion !== b.posicion) { // Si tienen distinta posición
+            return a.posicion - b.posicion; // Ordenar por posición de menor a mayor
+        }
+        if (a.puntos !== b.puntos) { // Si tienen la misma posición pero distintos puntos
+            return b.puntos - a.puntos; // Ordenar por puntos de mayor a menor
+        }
+        return b.diferencia - a.diferencia; // Ordenar por diferencia de mayor a menor
+    });
+}
 
-// Lista de partidos de la próxima fase
-let partidosProximaFase = [];
+function calcularEquiposQueAvanzan(fase) {
+
+    let partidos = [];
+    if (fase === 'semi') {
+        partidos = partidosCuartos;
+    } else if (fase === 'final') {
+        partidos = partidosSemifinales;
+    }
+
+    //console.log('obtenerEquiposQueAvanzan:', partidos);
+
+    return partidos.map(partido => {
+        if (partido.resultado) {
+            if (partido.resultado.local > partido.resultado.visitante) {
+                return partido.local;
+            } else if (partido.resultado.local < partido.resultado.visitante) {
+                return partido.visitante;
+            } else {
+                return partido.local; // En caso de empate, gana el local
+            }
+        } else {
+            return partido.local; // Asumimos que gana el local si no hay resultado
+        }
+    });
+
+}
 
 // Función para generar los partidos de la próxima fase
-function generarPartidosProximaFase(equipos) {
-    partidosProximaFase = [];
+function generarPartidosCuartos(equipos) {
+    //partidosCuartos = [];
     // Hacemos una copia del arreglo para no modificar el original
     const equiposCopy = equipos.slice(); // O también puedes usar [...equipos]
     
@@ -239,17 +307,23 @@ function generarPartidosProximaFase(equipos) {
     while (equiposCopy.length > 1) {
         const local = equiposCopy.shift(); // Saca el primer equipo (mejor ubicado)
         const visitante = equiposCopy.pop(); // Saca el último equipo (peor ubicado)
-        partidosProximaFase.push({ local, visitante, resultado: null });
+            // Cada cruce tiene dos partidos
+        partidosCuartos.push({
+            equipoLocal: local,
+            equipoVisitante: visitante,
+            partidoIda: { local: visitante, visitante: local, resultado: null },
+            partidoVuelta: { local: local, visitante: visitante, resultado: null }
+        });
     }
 }
 
 
 // Función para mostrar la tabla actualizada
-function mostrarTablaActualizada(equiposAvanzan) {
+function mostrarTablaParaCuartos(equiposAvanzan) {
     const contenedor = document.getElementById('updated-standings');
     contenedor.innerHTML = '';
 
-    console.log('Equipos que avanzan:', equiposAvanzan);
+    //console.log('Equipos que avanzan:', equiposAvanzan);
 
     const tabla = document.createElement('table');
     const encabezado = document.createElement('tr');
@@ -286,75 +360,138 @@ function mostrarTablaActualizada(equiposAvanzan) {
     contenedor.appendChild(tabla);
 }
 
-// Función para mostrar los partidos de la próxima fase
-function mostrarProximaFase() {
+// Función para mostrar los partidos de la próxima fase (ida y vuelta)
+function mostrarPartidosCuartos() {
     const contenedor = document.getElementById('next-phase-matches');
     contenedor.innerHTML = '';
 
-    if (partidosProximaFase.length === 0) {
+    if (partidosCuartos.length === 0) {
         contenedor.textContent = 'No hay partidos programados para la próxima fase aún.';
         return;
     }
 
     const tabla = document.createElement('table');
     const encabezado = document.createElement('tr');
-    ['Local', 'Visitante', 'Resultado', 'Ingresar Resultado'].forEach(texto => {
+    ['Día', 'Local', 'Visitante', 'Resultado', 'Ingresar Resultado'].forEach(texto => {
         const th = document.createElement('th');
         th.textContent = texto;
         encabezado.appendChild(th);
     });
     tabla.appendChild(encabezado);
 
-    partidosProximaFase.forEach((partido, index) => {
-        const fila = document.createElement('tr');
+    partidosCuartos.forEach((partido, index) => {
+        // Partidos de Ida
+        const filaIda = document.createElement('tr');
+        filaIda.classList.add('partido-ida'); // Clase para personalizar estilos
 
-        const celdaLocal = document.createElement('td');
-        celdaLocal.textContent = partido.local.nombre;
+        const celdaDiaIda = document.createElement('td');
+        celdaDiaIda.textContent = 'Ida'; // Marcar el partido como "Ida"
 
-        const celdaVisitante = document.createElement('td');
-        celdaVisitante.textContent = partido.visitante.nombre;
+        const celdaLocalIda = document.createElement('td');
+        celdaLocalIda.textContent = partido.partidoIda.local.nombre;
 
-        const celdaResultado = document.createElement('td');
-        if (partido.resultado) {
-            celdaResultado.textContent = `${partido.resultado.local} - ${partido.resultado.visitante}`;
-        } else {
-            celdaResultado.textContent = 'Por jugar';
-        }
+        const celdaVisitanteIda = document.createElement('td');
+        celdaVisitanteIda.textContent = partido.partidoIda.visitante.nombre;
 
-        const celdaIngresar = document.createElement('td');
-        if (!partido.resultado) {
-            const inputLocal = document.createElement('input');
-            inputLocal.type = 'number';
-            inputLocal.min = 0;
-            inputLocal.id = `local-next-${index}`;
+        const celdaResultadoIda = document.createElement('td');
+        celdaResultadoIda.textContent = partido.partidoIda.resultado
+            ? `${partido.partidoIda.resultado.local} - ${partido.partidoIda.resultado.visitante}`
+            : 'Por jugar';
 
-            const inputVisitante = document.createElement('input');
-            inputVisitante.type = 'number';
-            inputVisitante.min = 0;
-            inputVisitante.id = `visitante-next-${index}`;
+        const celdaIngresarIda = document.createElement('td');
+    //    if (!partido.partidoIda.resultado) {
+            const inputLocalIda = document.createElement('input');
+            inputLocalIda.type = 'number';
+            inputLocalIda.min = 0;
+            inputLocalIda.id = `ida-local-${index}`;
 
-            const botonGuardar = document.createElement('button');
-            botonGuardar.textContent = 'Guardar';
-            botonGuardar.onclick = () => guardarResultadoProximaFase(index);
+            const inputVisitanteIda = document.createElement('input');
+            inputVisitanteIda.type = 'number';
+            inputVisitanteIda.min = 0;
+            inputVisitanteIda.id = `ida-visitante-${index}`;
 
-            celdaIngresar.appendChild(inputLocal);
-            celdaIngresar.appendChild(document.createTextNode(' - '));
-            celdaIngresar.appendChild(inputVisitante);
-            celdaIngresar.appendChild(botonGuardar);
-        } else {
-            celdaIngresar.textContent = 'Resultado guardado';
-        }
+            const botonGuardarIda = document.createElement('button');
+            botonGuardarIda.textContent = 'Guardar';
+            botonGuardarIda.onclick = () => guardarResultadoIda(index);
 
-        fila.appendChild(celdaLocal);
-        fila.appendChild(celdaVisitante);
-        fila.appendChild(celdaResultado);
-        fila.appendChild(celdaIngresar);
+            celdaIngresarIda.appendChild(inputLocalIda);
+            celdaIngresarIda.appendChild(document.createTextNode(' - '));
+            celdaIngresarIda.appendChild(inputVisitanteIda);
+            celdaIngresarIda.appendChild(botonGuardarIda);
+   /*     } else {
+            celdaIngresarIda.textContent = 'Resultado guardado';
+        }*/
 
-        tabla.appendChild(fila);
+        filaIda.appendChild(celdaDiaIda);
+        filaIda.appendChild(celdaLocalIda);
+        filaIda.appendChild(celdaVisitanteIda);
+        filaIda.appendChild(celdaResultadoIda);
+        filaIda.appendChild(celdaIngresarIda);
+        tabla.appendChild(filaIda);
+
+        // Partidos de Vuelta
+        const filaVuelta = document.createElement('tr');
+        filaVuelta.classList.add('partido-vuelta'); // Clase para personalizar estilos
+
+        const celdaDiaVuelta = document.createElement('td');
+        celdaDiaVuelta.textContent = 'Vuelta'; // Marcar el partido como "Vuelta"
+
+        const celdaLocalVuelta = document.createElement('td');
+        celdaLocalVuelta.textContent = partido.partidoVuelta.local.nombre;
+
+        const celdaVisitanteVuelta = document.createElement('td');
+        celdaVisitanteVuelta.textContent = partido.partidoVuelta.visitante.nombre;
+
+        const celdaResultadoVuelta = document.createElement('td');
+        celdaResultadoVuelta.textContent = partido.partidoVuelta.resultado
+            ? `${partido.partidoVuelta.resultado.local} - ${partido.partidoVuelta.resultado.visitante}`
+            : 'Por jugar';
+
+        const celdaIngresarVuelta = document.createElement('td');
+        //if (!partido.partidoVuelta.resultado) {
+            const inputLocalVuelta = document.createElement('input');
+            inputLocalVuelta.type = 'number';
+            inputLocalVuelta.min = 0;
+            inputLocalVuelta.id = `vuelta-local-${index}`;
+
+            const inputVisitanteVuelta = document.createElement('input');
+            inputVisitanteVuelta.type = 'number';
+            inputVisitanteVuelta.min = 0;
+            inputVisitanteVuelta.id = `vuelta-visitante-${index}`;
+
+            const botonGuardarVuelta = document.createElement('button');
+            botonGuardarVuelta.textContent = 'Guardar';
+            botonGuardarVuelta.onclick = () => guardarResultadoVuelta(index);
+
+            celdaIngresarVuelta.appendChild(inputLocalVuelta);
+            celdaIngresarVuelta.appendChild(document.createTextNode(' - '));
+            celdaIngresarVuelta.appendChild(inputVisitanteVuelta);
+            celdaIngresarVuelta.appendChild(botonGuardarVuelta);
+  /*      } else {
+            celdaIngresarVuelta.textContent = 'Resultado guardado';
+        }*/
+
+        filaVuelta.appendChild(celdaDiaVuelta);
+        filaVuelta.appendChild(celdaLocalVuelta);
+        filaVuelta.appendChild(celdaVisitanteVuelta);
+        filaVuelta.appendChild(celdaResultadoVuelta);
+        filaVuelta.appendChild(celdaIngresarVuelta);
+        tabla.appendChild(filaVuelta);
+
+       
+        // Fila vacía para separar los enfrentamientos
+        const filaSeparadora = document.createElement('tr');
+        filaSeparadora.classList.add('separador-enfrentamientos');
+        const celdaSeparadora = document.createElement('td');
+        celdaSeparadora.colSpan = 5; // Ocupa todas las columnas
+        celdaSeparadora.innerHTML = '<hr>'; // Línea de separación
+        filaSeparadora.appendChild(celdaSeparadora);
+        tabla.appendChild(filaSeparadora);
     });
 
     contenedor.appendChild(tabla);
 }
+
 
 // Función para guardar el resultado de un partido de la próxima fase
 function guardarResultadoProximaFase(index) {
@@ -376,21 +513,7 @@ function guardarResultadoProximaFase(index) {
     mostrarProximaFase(); // Actualizamos la vista
 }
 
-// Lista de partidos de la final por el primer ascenso
-let partidoFinalAscenso = null;
 
-// Función para inicializar el partido por el primer ascenso
-function inicializarPartidoFinalAscenso() {
-    // Partido entre los primeros de cada zona
-    const equipoLocal = equiposZonaA[0]; // San Martin (T)
-    const equipoVisitante = equiposZonaB[0]; // Aldosivi
-
-    partidoFinalAscenso = {
-        local: equipoLocal,
-        visitante: equipoVisitante,
-        resultado: { local: 0, visitante: 2 }
-    };
-}
 
 function mostrarPartidoFinalAscenso() {
     const contenedor = document.getElementById('final-match');
@@ -422,30 +545,26 @@ function mostrarPartidoFinalAscenso() {
     }
 
     const celdaIngresar = document.createElement('td');
-    //if (!partido.resultado) {
-        const inputLocal = document.createElement('input');
-        inputLocal.type = 'number';
-        inputLocal.min = 0;
-        inputLocal.value = partido.resultado ? partido.resultado.local : '';
-        inputLocal.id = `local-final`;
+    const inputLocal = document.createElement('input');
+    inputLocal.type = 'number';
+    inputLocal.min = 0;
+    inputLocal.value = partido.resultado ? partido.resultado.local : '';
+    inputLocal.id = `local-final`;
 
-        const inputVisitante = document.createElement('input');
-        inputVisitante.type = 'number';
-        inputVisitante.min = 0;
-        inputVisitante.value = partido.resultado ? partido.resultado.visitante : '';
-        inputVisitante.id = `visitante-final`;
+    const inputVisitante = document.createElement('input');
+    inputVisitante.type = 'number';
+    inputVisitante.min = 0;
+    inputVisitante.value = partido.resultado ? partido.resultado.visitante : '';
+    inputVisitante.id = `visitante-final`;
 
-        const botonGuardar = document.createElement('button');
-        botonGuardar.textContent = 'Guardar';
-        botonGuardar.onclick = () => guardarResultadoFinalAscenso();
+    const botonGuardar = document.createElement('button');
+    botonGuardar.textContent = 'Guardar';
+    botonGuardar.onclick = () => guardarResultadoFinalAscenso();
 
-        celdaIngresar.appendChild(inputLocal);
-        celdaIngresar.appendChild(document.createTextNode(' - '));
-        celdaIngresar.appendChild(inputVisitante);
-        celdaIngresar.appendChild(botonGuardar);
-    /*} else {
-        celdaIngresar.textContent = 'Resultado guardado';
-    }*/
+    celdaIngresar.appendChild(inputLocal);
+    celdaIngresar.appendChild(document.createTextNode(' - '));
+    celdaIngresar.appendChild(inputVisitante);
+    celdaIngresar.appendChild(botonGuardar);
 
     fila.appendChild(celdaLocal);
     fila.appendChild(celdaVisitante);
@@ -475,8 +594,244 @@ function guardarResultadoFinalAscenso() {
 }
 
 
-// Inicializar todo al cargar la página
-inicializarPartidosPrimeraFase();
-inicializarPartidoFinalAscenso();
-mostrarPartidoFinalAscenso();
-actualizarTablaYProximaFase(); // Llamamos a esta función para mostrar la tabla y los partidos
+
+// Función para generar los partidos de las semifinales
+function generarPartidosSemifinales(equipos) {
+    partidosSemifinales = [];
+    // Hacemos una copia del arreglo para no modificar el original
+    const equiposCopy = equipos.slice(); // O también puedes usar [...equipos]
+    
+    // Emparejar el 1ro con el último, 2do con el penúltimo, etc.
+    while (equiposCopy.length > 1) {
+        const local = equiposCopy.shift(); // Saca el primer equipo (mejor ubicado)
+        const visitante = equiposCopy.pop(); // Saca el último equipo (peor ubicado)
+        partidosSemifinales.push({ local, visitante, resultado: null });
+    }
+}
+
+// Función para mostrar la tabla actualizada de cuartos
+function mostrarTablaActualizadaCuartos(equiposAvanzan) {
+    const contenedor = document.getElementById('updated-standings-quarters');
+    contenedor.innerHTML = '';
+
+    const tabla = document.createElement('table');
+    const encabezado = document.createElement('tr');
+    ['Posición', 'Equipo', 'Posición Original', 'Puntos'].forEach(texto => {
+        const th = document.createElement('th');
+        th.textContent = texto;
+        encabezado.appendChild(th);
+    });
+    tabla.appendChild(encabezado);
+
+    equiposAvanzan.forEach((equipo, index) => {
+        if (!equipo) return; // Ignora equipos undefined
+        const fila = document.createElement('tr');
+
+        const celdaPosicion = document.createElement('td');
+        celdaPosicion.textContent = index + 1;
+
+        const celdaEquipo = document.createElement('td');
+        celdaEquipo.textContent = equipo.nombre || "Equipo sin nombre";
+
+        const celdaPosicionOriginal = document.createElement('td');
+        celdaPosicionOriginal.textContent = equipo.posicion || "Sin posición";
+
+        const celdaPuntos = document.createElement('td');
+        celdaPuntos.textContent = equipo.puntos || "Sin puntos";
+
+        fila.appendChild(celdaPosicion);
+        fila.appendChild(celdaEquipo);
+        fila.appendChild(celdaPosicionOriginal);
+        fila.appendChild(celdaPuntos);
+
+        tabla.appendChild(fila);
+    });
+
+    contenedor.appendChild(tabla);
+}
+
+
+// Función para mostrar los partidos de las semifinales
+function mostrarSemifinales() {
+    const contenedor = document.getElementById('semifinal-matches');
+    contenedor.innerHTML = '';
+
+    if (partidosSemifinales.length === 0) {
+        contenedor.textContent = 'No hay partidos programados para las semifinales aún.';
+        return;
+    }
+
+    const tabla = document.createElement('table');
+    const encabezado = document.createElement('tr');
+    ['Local', 'Visitante', 'Resultado', 'Ingresar Resultado'].forEach(texto => {
+        const th = document.createElement('th');
+        th.textContent = texto;
+        encabezado.appendChild(th);
+    });
+    tabla.appendChild(encabezado);
+
+    partidosSemifinales.forEach((partido, index) => {
+        if (!partido.local || !partido.visitante) return; // Ignorar partidos incompletos
+        const fila = document.createElement('tr');
+
+        const celdaLocal = document.createElement('td');
+        celdaLocal.textContent = partido.local.nombre;
+
+        const celdaVisitante = document.createElement('td');
+        celdaVisitante.textContent = partido.visitante.nombre;
+
+        const celdaResultado = document.createElement('td');
+        if (partido.resultado) {
+            celdaResultado.textContent = `${partido.resultado.local} - ${partido.resultado.visitante}`;
+        } else {
+            celdaResultado.textContent = 'Por jugar';
+        }
+
+        const celdaIngresar = document.createElement('td');
+        const inputLocal = document.createElement('input');
+        inputLocal.type = 'number';
+        inputLocal.min = 0;
+        inputLocal.value = partido.resultado ? partido.resultado.local : '';
+        inputLocal.id = `local-semi-${index}`;
+
+        const inputVisitante = document.createElement('input');
+        inputVisitante.type = 'number';
+        inputVisitante.min = 0;
+        inputVisitante.value = partido.resultado ? partido.resultado.visitante : '';
+        inputVisitante.id = `visitante-semi-${index}`;
+
+        const botonGuardar = document.createElement('button');
+        botonGuardar.textContent = 'Guardar';
+        botonGuardar.onclick = () => guardarResultadoSemifinal(index);
+
+        celdaIngresar.appendChild(inputLocal);
+        celdaIngresar.appendChild(document.createTextNode(' - '));
+        celdaIngresar.appendChild(inputVisitante);
+        celdaIngresar.appendChild(botonGuardar);
+
+
+        fila.appendChild(celdaLocal);
+        fila.appendChild(celdaVisitante);
+        fila.appendChild(celdaResultado);
+        fila.appendChild(celdaIngresar);
+
+        tabla.appendChild(fila);
+    });
+
+    contenedor.appendChild(tabla);
+}
+
+// Función para guardar el resultado de un partido de las semifinales
+function guardarResultadoSemifinal(index) {
+    const marcadorLocal = document.getElementById(`local-semi-${index}`).value;
+    const marcadorVisitante = document.getElementById(`visitante-semi-${index}`).value;
+
+    if (marcadorLocal === '' || marcadorVisitante === '') {
+        alert('Por favor, ingrese ambos marcadores.');
+        return;
+    }
+
+    partidosSemifinales[index].resultado = {
+        local: parseInt(marcadorLocal),
+        visitante: parseInt(marcadorVisitante)
+    };
+
+    // Si deseas, puedes implementar la actualización para fases posteriores
+    // actualizarTablaYProximaFase(); // Si hay más fases
+    mostrarSemifinales(); // Actualizamos la vista
+}
+
+function guardarResultadoIda(index) {
+    const marcadorLocal = document.getElementById(`ida-local-${index}`).value;
+    const marcadorVisitante = document.getElementById(`ida-visitante-${index}`).value;
+
+    if (marcadorLocal === '' || marcadorVisitante === '') {
+        alert('Por favor, ingrese ambos marcadores de ida.');
+        return;
+    }
+
+    partidosCuartos[index].partidoIda.resultado = {
+        local: parseInt(marcadorLocal),
+        visitante: parseInt(marcadorVisitante)
+    };
+
+    mostrarPartidosCuartos();
+}
+
+function guardarResultadoVuelta(index) {
+    const marcadorLocal = document.getElementById(`vuelta-local-${index}`).value;
+    const marcadorVisitante = document.getElementById(`vuelta-visitante-${index}`).value;
+
+    if (marcadorLocal === '' || marcadorVisitante === '') {
+        alert('Por favor, ingrese ambos marcadores de vuelta.');
+        return;
+    }
+
+    partidosCuartos[index].partidoVuelta.resultado = {
+        local: parseInt(marcadorLocal),
+        visitante: parseInt(marcadorVisitante)
+    };
+
+    calcularResultadoGlobal(index);
+    mostrarPartidosCuartos();
+}
+
+function calcularResultadoGlobal(index) {
+    const partido = partidosCuartos[index];
+
+    // Obtener los resultados de ida y vuelta
+    const resultadoIda = partido.partidoIda.resultado;
+    const resultadoVuelta = partido.partidoVuelta.resultado;
+
+    console.log('Resultado Ida:', resultadoIda);
+    console.log('Resultado Vuelta:', resultadoVuelta);
+    // Si falta algún resultado, asignar al local del partido de vuelta como ganador provisional
+    if (!resultadoIda || !resultadoVuelta) {
+        partido.ganador = partido.partidoVuelta.local;
+        return;
+    }
+
+    // Determinar los ganadores de cada partido
+    const ganadorIda = resultadoIda.local > resultadoIda.visitante ? partido.partidoIda.local :
+                      resultadoIda.local < resultadoIda.visitante ? partido.partidoIda.visitante : null;
+    const ganadorVuelta = resultadoVuelta.local > resultadoVuelta.visitante ? partido.partidoVuelta.local :
+                          resultadoVuelta.local < resultadoVuelta.visitante ? partido.partidoVuelta.visitante : null;
+
+    // Criterio 1: Verificar si un equipo ganó ambos partidos o ganó uno y empató el otro
+    if (ganadorIda && ganadorIda === ganadorVuelta) {
+        partido.ganador = ganadorIda; // Mismo ganador en ambos partidos
+    } else if (ganadorIda && !ganadorVuelta) {
+        partido.ganador = ganadorIda; // Ganador en el partido de ida, empate en el partido de vuelta
+    } else if (ganadorVuelta && !ganadorIda) {
+        partido.ganador = ganadorVuelta; // Ganador en el partido de vuelta, empate en el partido de ida
+    } else {
+        // Criterio 2: Si no hay un ganador directo, evaluar la diferencia de gol
+        const golesLocal = resultadoIda.local + resultadoVuelta.visitante;
+        const golesVisitante = resultadoIda.visitante + resultadoVuelta.local;
+
+        if (golesLocal > golesVisitante) {
+            partido.ganador = partido.partidoIda.local;
+        } else if (golesVisitante > golesLocal) {
+            partido.ganador = partido.partidoIda.visitante;
+        } else {
+            // Criterio 3: En caso de empate total, gana el local en el partido de vuelta
+            partido.ganador = partido.partidoVuelta.local;
+        }
+    }
+
+    // Actualizar los equipos que avanzan a la siguiente fase
+    actualizarEquiposParaSiguienteFase();
+}
+
+
+function actualizarEquiposParaSiguienteFase() {
+    equiposSemi = partidosCuartos
+        .filter(partido => partido.ganador) // Solo incluir partidos con ganador definido
+        .map(partido => partido.ganador)
+        .filter(equipo => equipo); // Filtrar cualquier valor `undefined` que quede
+    
+    mostrarTablaActualizadaCuartos(equiposSemi);
+    generarPartidosSemifinales(equiposSemi);
+    mostrarSemifinales();
+}
+

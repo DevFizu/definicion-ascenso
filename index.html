@@ -1,30 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <title>Torneo Nacional B - Playoffs</title>
-    <style>
-        /* Estilos básicos */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #aaa;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #ddd;
-        }
-        input[type="number"] {
-            width: 50px;
-        }
-    </style>
 </head>
 <body>
-    <h1>Torneo Nacional B - Playoffs</h1>
+    <h1>Torneo Nacional B - Calculadora Playoffs</h1>
+    <h4>partidos no disputados se asume ganador al de ventaja deportiva</h4>
 
     <h2>Final por el Primer Ascenso</h2>
     <div id="final-match"></div>
@@ -32,11 +15,18 @@
     <h2>Primera Fase - Partidos y Resultados</h2>
     <div id="first-phase-matches"></div>
 
-    <h2>Tabla Actualizada</h2>
+    <h2>Tabla Después Primera Fase</h2>
     <div id="updated-standings"></div>
 
-    <h2>Cuartos de Final - Partidos</h2>
+    <h2>Cuartos de Final</h2>
+    <h3>Partidos Ida y vuelta</h3>
     <div id="next-phase-matches"></div>
+
+    <h2>Tabla Después de Cuartos</h2>
+    <div id="updated-standings-quarters"></div>
+
+    <h2>Semifinales - Partidos</h2>
+    <div id="semifinal-matches"></div>
 
     <script src="script.js"></script>
 </body>

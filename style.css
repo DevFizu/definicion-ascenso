@@ -1,0 +1,30 @@
+.partido-ida {
+    background-color: #f9f9f9;
+}
+
+.partido-vuelta {
+    background-color: #e9e9e9;
+}
+
+.separador-enfrentamientos td {
+    padding: 5px 0;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #aaa;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #ddd;
+}
+
+input[type="number"] {
+    width: 50px;
+}

@@ -830,6 +830,7 @@ function actualizarEquiposParaSiguienteFase() {
         .map(partido => partido.ganador)
         .filter(equipo => equipo); // Filtrar cualquier valor `undefined` que quede
     
+    ordenarEquipos(equiposSemi);
     mostrarTablaActualizadaCuartos(equiposSemi);
     generarPartidosSemifinales(equiposSemi);
     mostrarSemifinales();

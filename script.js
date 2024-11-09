@@ -560,11 +560,13 @@ function mostrarPartidosCuartos() {
         const inputLocalIda = document.createElement('input');
         inputLocalIda.type = 'number';
         inputLocalIda.min = 0;
+        inputLocalIda.value = partido.partidoIda.resultado ? partido.partidoIda.resultado.local : '';
         inputLocalIda.id = `cuartos-ida-local-${index}`;
 
         const inputVisitanteIda = document.createElement('input');
         inputVisitanteIda.type = 'number';
         inputVisitanteIda.min = 0;
+        inputVisitanteIda.value = partido.partidoIda.resultado ? partido.partidoIda.resultado.visitante : '';
         inputVisitanteIda.id = `cuartos-ida-visitante-${index}`;
 
         const botonGuardarIda = document.createElement('button');
@@ -601,28 +603,27 @@ function mostrarPartidosCuartos() {
             : 'Por jugar';
 
         const celdaIngresarVuelta = document.createElement('td');
-        //if (!partido.partidoVuelta.resultado) {
-            const inputLocalVuelta = document.createElement('input');
-            inputLocalVuelta.type = 'number';
-            inputLocalVuelta.min = 0;
-            inputLocalVuelta.id = `cuartos-vuelta-local-${index}`;
 
-            const inputVisitanteVuelta = document.createElement('input');
-            inputVisitanteVuelta.type = 'number';
-            inputVisitanteVuelta.min = 0;
-            inputVisitanteVuelta.id = `cuartos-vuelta-visitante-${index}`;
+        const inputLocalVuelta = document.createElement('input');
+        inputLocalVuelta.type = 'number';
+        inputLocalVuelta.min = 0;
+        inputLocalVuelta.value = partido.partidoVuelta.resultado ? partido.partidoVuelta.resultado.local : '';
+        inputLocalVuelta.id = `cuartos-vuelta-local-${index}`;
 
-            const botonGuardarVuelta = document.createElement('button');
-            botonGuardarVuelta.textContent = 'Guardar';
-            botonGuardarVuelta.onclick = () => guardarResultadoIdaYVuelta('cuartos', 'vuelta', index);
+        const inputVisitanteVuelta = document.createElement('input');
+        inputVisitanteVuelta.type = 'number';
+        inputVisitanteVuelta.min = 0;
+        inputVisitanteVuelta.value = partido.partidoVuelta.resultado ? partido.partidoVuelta.resultado.visitante : '';
+        inputVisitanteVuelta.id = `cuartos-vuelta-visitante-${index}`;
 
-            celdaIngresarVuelta.appendChild(inputLocalVuelta);
-            celdaIngresarVuelta.appendChild(document.createTextNode(' - '));
-            celdaIngresarVuelta.appendChild(inputVisitanteVuelta);
-            celdaIngresarVuelta.appendChild(botonGuardarVuelta);
-  /*      } else {
-            celdaIngresarVuelta.textContent = 'Resultado guardado';
-        }*/
+        const botonGuardarVuelta = document.createElement('button');
+        botonGuardarVuelta.textContent = 'Guardar';
+        botonGuardarVuelta.onclick = () => guardarResultadoIdaYVuelta('cuartos', 'vuelta', index);
+
+        celdaIngresarVuelta.appendChild(inputLocalVuelta);
+        celdaIngresarVuelta.appendChild(document.createTextNode(' - '));
+        celdaIngresarVuelta.appendChild(inputVisitanteVuelta);
+        celdaIngresarVuelta.appendChild(botonGuardarVuelta);
 
         filaVuelta.appendChild(celdaDiaVuelta);
         filaVuelta.appendChild(celdaLocalVuelta);

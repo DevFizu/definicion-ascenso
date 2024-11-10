@@ -59,7 +59,7 @@ let resultadosPrimeraFase = [
 ];
 let resultadosCuartos = [
     {nombre: 'San Martin (T)', resultadoIda: { local: 1, visitante: 2 }, resultadovuelta: { local: '', visitante: '' }},
-    {nombre: 'San Martin (SJ)', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }},
+    {nombre: 'San Martin (SJ)', resultadoIda: { local: 0, visitante: 1 }, resultadovuelta: { local: '', visitante: '' }},
     {nombre: 'Dep. Madryn', resultadoIda: { local: 3, visitante: 1 }, resultadovuelta: { local: '', visitante: '' }},
     {nombre: 'Nueva Chicago', resultadoIda: { local: '', visitante: '' }, resultadovuelta: { local: '', visitante: '' }}
 ];
